@@ -1,0 +1,5 @@
+build/
+.cache/
+
+token
+compile_commands.json
