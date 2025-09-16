@@ -14,7 +14,6 @@ project (${project_name} VERSION ${project_version})
 add_executable(${project_name})
 
 find_package(DPP REQUIRED)
-message("FOUND? ${DPP_FOUND}")
 if (NOT DPP_FOUND)
     message(FATAL_ERROR "Failed to find dpp libraries")
 else()
