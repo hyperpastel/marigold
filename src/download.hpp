@@ -1,4 +1,5 @@
 #include "SafeQueue.hpp"
+#include "embeds.hpp"
 #include <atomic>
 #include <cstdlib>
 #include <dpp/channel.h>
@@ -68,9 +69,9 @@ inline void download_thread_main(marigold::util::SafeQueue<Request>& requests,
 
 		const auto response =
 			result.code == 0
-				? std::format("Successfully downloaded file to ``{}``!",
-							  result.file_path)
-				: std::string{"I did not make it :("};
+				? marigold::embeds::download_success(request.m_video_id,
+													 "https://youtube.com")
+				: marigold::embeds::download_fail(request.m_video_id);
 
 		const auto message = dpp::message{request.m_snowflake, response};
 		cluster.message_create(message);

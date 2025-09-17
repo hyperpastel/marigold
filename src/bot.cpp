@@ -2,6 +2,7 @@
 #include "SafeQueue.hpp"
 #include "commands.hpp"
 #include "download.hpp"
+#include "embeds.hpp"
 #include <dpp/cluster.h>
 #include <dpp/message.h>
 #include <regex>
@@ -46,10 +47,8 @@ void MarigoldBot::register_commands()
 				// TODO Use embeds
 				if (!video_id_optional.has_value())
 				{
-					event.reply(
-						std::format("Failed to obtain ``video_id`` from "
-									"parameter ``url``, which was: ```{}```",
-									url));
+					const auto embed = marigold::embeds::failed_to_parse(url);
+					event.reply(embed);
 					return;
 				}
 
@@ -57,8 +56,8 @@ void MarigoldBot::register_commands()
 				const auto request =
 					download::Request{video_id, event.command.channel_id};
 
-				event.reply(std::format("Queued video with ``video_id: {}``",
-										video_id));
+				const auto embed = marigold::embeds::queued_video(video_id);
+				event.reply(embed);
 
 				m_requests.push(request);
 			}
