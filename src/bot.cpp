@@ -7,9 +7,7 @@
 #include <regex>
 #include <string>
 
-// TODO Also allow this to load youtu.be urls, they have the video id right
-// after them
-std::optional<std::string> get_videoid_from_url(std::string url)
+std::optional<std::string> get_video_id_from_url(std::string url)
 {
 	const auto urlPattern = std::regex{
 		R"((?:https?://)?(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([a-zA-Z0-9_-]{11}))"};
@@ -31,8 +29,6 @@ MarigoldBot::MarigoldBot(std::string token,
 	m_cluster.on_log(dpp::utility::cout_logger());
 }
 
-void MarigoldBot::clear_commands() { m_cluster.global_bulk_command_delete(); }
-
 void MarigoldBot::register_commands()
 {
 
@@ -45,10 +41,10 @@ void MarigoldBot::register_commands()
 				const auto url =
 					std::get<std::string>(event.get_parameter("url"));
 
-				const auto video_id_o = get_videoid_from_url(url);
+				const auto video_id_optional = get_video_id_from_url(url);
 
 				// TODO Use embeds
-				if (!video_id_o.has_value())
+				if (!video_id_optional.has_value())
 				{
 					event.reply(
 						std::format("Failed to obtain ``video_id`` from "
@@ -57,7 +53,7 @@ void MarigoldBot::register_commands()
 					return;
 				}
 
-				const auto video_id = *video_id_o;
+				const auto video_id = *video_id_optional;
 				const auto request =
 					download::Request{video_id, event.command.channel_id};
 

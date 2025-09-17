@@ -15,7 +15,6 @@ struct MarigoldBot
 	MarigoldBot(std::string token,
 				marigold::util::SafeQueue<download::Request>& requests);
 
-	void clear_commands();
 	void register_commands();
 	void run();
 };
