@@ -38,13 +38,13 @@ inline dpp::embed download_success(std::string_view video_id,
 		.set_url(download_url);
 }
 
-// TODO Add error log here once we have process handles
-inline dpp::embed download_fail(std::string_view video_id)
+inline dpp::embed download_fail(std::string_view video_id,
+								std::string_view description)
 {
 	return dpp::embed{}
 		.set_color(color)
 		.set_title("Failed to download video")
-		.set_description("An error occurred")
+		.set_description(std::format("```{}```", description))
 		.add_field("video_id", video_id);
 }
 
